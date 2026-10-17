@@ -28,6 +28,7 @@ protected:
     bool mFollowBall = false;
 public:
     CPUComponent();
+    void Update();
     ~CPUComponent();
 };
 
@@ -38,5 +39,6 @@ protected:
     float mSpeedY = 0;
 public:
     BallComponent();
+    void Update();
     ~BallComponent();
 };

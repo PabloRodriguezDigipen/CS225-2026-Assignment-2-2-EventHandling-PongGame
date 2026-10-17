@@ -22,13 +22,13 @@ void Level_1_Load()
     player = new Entity;
     RenderComponent* PlayerRender = new RenderComponent(false);
     player->attach(PlayerRender);
-    PositionComponent* PlayerPosition = new PositionComponent(-100, 0);
+    PositionComponent* PlayerPosition = new PositionComponent(-375, 0);
     player->attach(PlayerPosition);
 
     CPU = new Entity;
     RenderComponent* CPURender = new RenderComponent(false);
     CPU->attach(CPURender);
-    PositionComponent* CPUPosition = new PositionComponent(100, 0);
+    PositionComponent* CPUPosition = new PositionComponent(375, 0);
     CPU->attach(CPUPosition);
 
     ball = new Entity;
