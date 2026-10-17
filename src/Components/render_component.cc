@@ -6,15 +6,18 @@
 #include "render_component.hh"
 #include "position_component.hh"
 
-RenderComponent::RenderComponent() : Component("Render")
+RenderComponent::RenderComponent(bool isBall) : Component("Render")
 {
-
+	mIsBall = isBall;
 }
 
 void RenderComponent::Draw()
 {
 	PositionComponent* position = static_cast<PositionComponent*>(mOwner->getComponent("Position"));
-	AEGfxCircle(position->getX(), position->getX(), 50, AEGfxColor(255, 0, 0), 20);
+	if (mIsBall)
+		AEGfxCircle(position->getX(), position->getY(), 25, AEGfxColor(255, 0, 0), 20);
+	else
+		AEGfxRect(position->getX(), position->getY(), 0, 20, 100, AEGfxColor(255, 255, 255));
 }
 
 RenderComponent::~RenderComponent() {

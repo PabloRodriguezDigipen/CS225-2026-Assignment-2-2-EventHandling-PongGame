@@ -7,8 +7,9 @@
 /// </summary>
 class RenderComponent : public Component
 {
+    bool mIsBall;
 public:
-    RenderComponent();
+    RenderComponent(bool isBall);
     
     virtual void Draw();
     

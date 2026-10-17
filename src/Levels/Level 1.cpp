@@ -1,13 +1,43 @@
 #include <AEEngine.h>
 #include <imgui/imgui.h>
 #include "Level 1.h"
+#include "../Framework/entity.hh"
+#include "../Framework/event.hh"
+#include "../Framework/event_handlers.hh"
+#include "../Components/render_component.hh"
+#include "../Components/position_component.hh"
 
 int mode = 0;
+
+Entity* player;
+Entity* CPU;
+Entity* ball;
+
+EventManager* manager;
 
 bool ShowFrameworkMenu();
 
 void Level_1_Load()
 {
+    player = new Entity;
+    RenderComponent* PlayerRender = new RenderComponent(false);
+    player->attach(PlayerRender);
+    PositionComponent* PlayerPosition = new PositionComponent(-100, 0);
+    player->attach(PlayerPosition);
+
+    CPU = new Entity;
+    RenderComponent* CPURender = new RenderComponent(false);
+    CPU->attach(CPURender);
+    PositionComponent* CPUPosition = new PositionComponent(100, 0);
+    CPU->attach(CPUPosition);
+
+    ball = new Entity;
+    RenderComponent* BallRender = new RenderComponent(true);
+    ball->attach(BallRender);
+    PositionComponent* BallPosition = new PositionComponent(0, 0);
+    ball->attach(BallPosition);
+
+
 }
 
 void Level_1_Init()
@@ -28,6 +58,15 @@ void Level_1_Render()
     // clear frame buffer, do not delete this code
     AEGfxSetClearColor(AEGfxColor(0, 0, 0));
     AEGfxClearBuffer();
+
+    RenderComponent* PlayerRender = static_cast<RenderComponent*>(player->getComponent("Render"));
+    PlayerRender->Draw();
+
+    RenderComponent* CPURender = static_cast<RenderComponent*>(CPU->getComponent("Render"));
+    CPURender->Draw();
+
+    RenderComponent* BallRender = static_cast<RenderComponent*>(ball->getComponent("Render"));
+    BallRender->Draw();
 }
 
 void Level_1_Free()
@@ -44,6 +83,11 @@ void KeyboardInput()
     if (AEInputKeyTriggered('R'))
         AESetGameStateNext(AE_GS_RESTART);
     if (AEInputKeyTriggered('Q') && AEInputKeyPressed(AE_KEY_CTRL))
+        AESetGameStateNext(AE_GS_QUIT);
+
+    if (AEInputKeyTriggered('W'))
+        AESetGameStateNext(AE_GS_RESTART);
+    if (AEInputKeyTriggered('S') && AEInputKeyPressed(AE_KEY_CTRL))
         AESetGameStateNext(AE_GS_QUIT);
 }
 

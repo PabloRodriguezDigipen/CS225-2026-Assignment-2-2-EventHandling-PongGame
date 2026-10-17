@@ -23,6 +23,7 @@
 #define AE_KEY_SHIFT    16
 #define AE_KEY_TAB      9
 #define AE_KEY_ALT      10
+//VK_LEFT
 
 // Gamepad buttons
 #define AE_GAMEPAD_DPAD_UP        0x0001
