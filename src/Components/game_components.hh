@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../framework/component.hh"
+#include "../Framework/component.hh"
+#include "../Framework/game_events.hh"
 
-class CollisionComponent : public Component
-{
+class CollisionComponent : public Component {
 protected:
     int mWidth;
     int mHeight;
@@ -14,31 +14,32 @@ public:
     ~CollisionComponent();
 };
 
-class PlayerComponent : public Component
-{
+class PlayerComponent : public Component {
 protected:
 public:
     PlayerComponent();
+    void OnMove(PlayerMoveEvent* event);
     ~PlayerComponent();
 };
 
-class CPUComponent : public Component
-{
+class CPUComponent : public Component {
 protected:
+    Entity* mBall;
     bool mFollowBall = false;
+    int mSpeed = 2;
 public:
-    CPUComponent();
+    CPUComponent(Entity* ball);
     void Update();
+    void OnMove(CPUMoveEvent* event);
     ~CPUComponent();
 };
 
-class BallComponent : public Component
-{
+class BallComponent : public Component {
 protected:
     float mSpeedX = 0;
     float mSpeedY = 0;
 public:
-    BallComponent();
+    BallComponent(int speedX, int speedY);
     void Update();
     ~BallComponent();
 };
