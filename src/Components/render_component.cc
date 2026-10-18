@@ -15,7 +15,7 @@ void RenderComponent::Draw()
 {
 	PositionComponent* position = static_cast<PositionComponent*>(mOwner->getComponent("Position"));
 	if (mIsBall)
-		AEGfxCircle(position->getX(), position->getY(), 25, AEGfxColor(255, 0, 0), 20);
+		AEGfxCircle(position->getX(), position->getY(), 12, AEGfxColor(255, 0, 0), 20);
 	else
 		AEGfxRect(position->getX(), position->getY(), 0, 20, 100, AEGfxColor(255, 255, 255));
 }

@@ -19,6 +19,7 @@ protected:
 public:
     PlayerComponent();
     void OnMove(PlayerMoveEvent* event);
+    void OnReset(Reset* event);
     ~PlayerComponent();
 };
 
@@ -31,6 +32,7 @@ public:
     CPUComponent(Entity* ball);
     void Update();
     void OnMove(CPUMoveEvent* event);
+    void OnReset(Reset* event);
     ~CPUComponent();
 };
 
@@ -41,5 +43,7 @@ protected:
 public:
     BallComponent(int speedX, int speedY);
     void Update();
+    void OnRacket(BallHitEvent* event);
+    void OnReset(Reset* event);
     ~BallComponent();
 };

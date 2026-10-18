@@ -8,6 +8,7 @@
 #include "../Components/position_component.hh"
 #include "../Components/game_components.hh"
 #include "../Framework/game_events.hh"
+#include "../Components/collider_manager.hh"
 
 int mode = 0;
 
@@ -16,13 +17,12 @@ Entity* CPU;
 Entity* ball;
 
 InputEventManager* inputManager;
+CollisionManager* collisionManager;
 
 bool ShowFrameworkMenu();
 
 void Level_1_Load()
 {
-    inputManager = new InputEventManager;
-
     player = new Entity;
     RenderComponent* PlayerRender = new RenderComponent(false);
     player->attach(PlayerRender);
@@ -53,8 +53,15 @@ void Level_1_Load()
     CPUComponent* CPUComp = new CPUComponent(ball);
     CPU->attach(CPUComp);
 
-    inputManager->registerEventHandler(new EventHandler<PlayerComponent, PlayerMoveEvent>(PlayerComp, &PlayerComponent::OnMove));
+    collisionManager = new CollisionManager(player, ball, CPU);
+    collisionManager->registerEventHandler(new EventHandler<BallComponent, BallHitEvent>(BallComp, &BallComponent::OnRacket));
+    collisionManager->registerEventHandler(new EventHandler<CPUComponent, CPUMoveEvent>(CPUComp, &CPUComponent::OnMove));
+    collisionManager->registerEventHandler(new EventHandler<PlayerComponent, Reset>(PlayerComp, &PlayerComponent::OnReset));
+    collisionManager->registerEventHandler(new EventHandler<BallComponent, Reset>(BallComp, &BallComponent::OnReset));
+    collisionManager->registerEventHandler(new EventHandler<CPUComponent, Reset>(CPUComp, &CPUComponent::OnReset));
 
+    inputManager = new InputEventManager;
+    inputManager->registerEventHandler(new EventHandler<PlayerComponent, PlayerMoveEvent>(PlayerComp, &PlayerComponent::OnMove));
     inputManager->registerEventHandler(new EventHandler<CPUComponent, CPUMoveEvent>(CPUComp, &CPUComponent::OnMove));
 }
 
@@ -73,6 +80,8 @@ void Level_1_Update()
 
     CPUComponent* CPUUpdate = static_cast<CPUComponent*>(CPU->getComponent("CPU"));
     CPUUpdate->Update();
+
+    collisionManager->update();
 }
 
 void Level_1_Render()

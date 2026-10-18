@@ -12,4 +12,8 @@ public:
     int mDistance;
 };
 
+class BallHitEvent : public Event {};
+
 class CPUMoveEvent : public Event {};
+
+class Reset : public Event {};

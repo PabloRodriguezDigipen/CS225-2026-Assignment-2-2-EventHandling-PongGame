@@ -25,8 +25,17 @@ void PlayerComponent::OnMove(PlayerMoveEvent* event)
 {
 	PositionComponent* position = static_cast<PositionComponent*>(mOwner->getComponent("Position"));
 
-	if (position->getY() < 250)
-		position->setPosition(position->getX(), position->getY() + event->mDistance);
+	position->setPosition(position->getX(), position->getY() + event->mDistance);
+
+	if (position->getY() > 250)
+		position->setPosition(position->getX(), 250);
+	else if (position->getY() < -250)
+		position->setPosition(position->getX(), -250);
+}
+
+void PlayerComponent::OnReset(Reset* event) {
+	PositionComponent* position = static_cast<PositionComponent*>(mOwner->getComponent("Position"));
+	position->setPosition(-375, 0);
 }
 
 PlayerComponent::~PlayerComponent() {}
@@ -52,6 +61,13 @@ void CPUComponent::Update() {
 	}
 }
 
+void CPUComponent::OnReset(Reset* event) {
+	PositionComponent* position = static_cast<PositionComponent*>(mOwner->getComponent("Position"));
+	position->setPosition(375, 0);
+
+	mFollowBall = !mFollowBall;
+}
+
 void CPUComponent::OnMove(CPUMoveEvent* event) {
 	mFollowBall = !mFollowBall;
 }
@@ -67,12 +83,21 @@ BallComponent::BallComponent(int speedX, int speedY) : Component("Ball") {
 
 void BallComponent::Update() {
 	PositionComponent* position = static_cast<PositionComponent*>(mOwner->getComponent("Position"));
-	if (position->getX() > 375 || position->getX() < -375)
-		mSpeedX = -mSpeedX;
 	if (position->getY() > 275 || position->getY() < -275)
 		mSpeedY = -mSpeedY;
 
 	position->setPosition(position->getX() + mSpeedX, position->getY() + mSpeedY);
+}
+
+void BallComponent::OnRacket(BallHitEvent* event) {
+	mSpeedX = -mSpeedX;
+}
+
+void BallComponent::OnReset(Reset* event) {
+	PositionComponent* position = static_cast<PositionComponent*>(mOwner->getComponent("Position"));
+	position->setPosition(0,0);
+
+	mSpeedX = -mSpeedX;
 }
 
 BallComponent::~BallComponent() {}
