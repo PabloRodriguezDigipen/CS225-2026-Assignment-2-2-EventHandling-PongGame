@@ -7,6 +7,7 @@
 /// </summary>
 class RenderComponent : public Component
 {
+    //render depends on if its the ball or a racket
     bool mIsBall;
 public:
     RenderComponent(bool isBall);

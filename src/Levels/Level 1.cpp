@@ -74,12 +74,12 @@ void Level_1_Init()
 
     PositionComponent* rightPosition = new PositionComponent(400, 0);
     right->attach(rightPosition);
-    CollisionComponent* rightColider = new CollisionComponent(1, 300);
+    CollisionComponent* rightColider = new CollisionComponent(1, 500);
     right->attach(rightColider);
 
     PositionComponent* leftPosition = new PositionComponent(-400, 0);
     left->attach(leftPosition);
-    CollisionComponent* leftColider = new CollisionComponent(1, 300);
+    CollisionComponent* leftColider = new CollisionComponent(1, 500);
     left->attach(leftColider);
 
     //subscribe the objects to the collision events
