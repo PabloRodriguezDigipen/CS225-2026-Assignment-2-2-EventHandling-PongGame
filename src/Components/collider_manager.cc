@@ -1,25 +1,12 @@
 #include "collider_manager.hh"
+#include <AEEngine.h>
 
-bool CheckCollision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
-    if (x1 + (w1 / 2) < x2 - (w2 / 2))
-        return false;
-
-    if (x1 - (w1 / 2) > x2 + (w2 / 2))
-        return false;
-
-    if (y1 + (h1 / 2) < y2 - (h2 / 2))
-        return false;
-
-    if (y1 - (h1 / 2) > y2 + (h2 / 2))
-        return false;
-
-    return true;
-}
-
-CollisionManager::CollisionManager(Entity* player, Entity* ball, Entity* CPU) {
+CollisionManager::CollisionManager(Entity* player, Entity* ball, Entity* CPU, Entity* right, Entity* left) {
 	mPlayer = player;
     mBall = ball;
 	mCPU = CPU;
+    mRight = right;
+    mLeft = left;
 }
 
 void CollisionManager::update() {
@@ -32,7 +19,11 @@ void CollisionManager::update() {
     PositionComponent* cpuPos = static_cast<PositionComponent*>(mCPU->getComponent("Position"));
     CollisionComponent* cpuCol = static_cast<CollisionComponent*>(mCPU->getComponent("Collision"));
 
-    if (CheckCollision(ballPos->getX(), ballPos->getY(), ballCol->getWidth(), ballCol->getHeight(), playerPos->getX(), playerPos->getY(), playerCol->getWidth(), playerCol->getHeight())) {
+    AEVec2 ballPosition = AEVec2((float)ballPos->getX(), (float)ballPos->getY());
+    AEVec2 playerPosition = AEVec2((float)playerPos->getX(), (float)playerPos->getY());
+    AEVec2 cpuPosition = AEVec2((float)cpuPos->getX(), (float)cpuPos->getY());
+
+    if (AEStaticRectToStaticCircle(&playerPosition, (float)playerCol->getWidth(), (float)playerCol->getHeight(), &ballPosition, (float)ballCol->getWidth()/2.f)) {
         BallHitEvent event;
         notifyEvent(&event);
 
@@ -40,7 +31,7 @@ void CollisionManager::update() {
         notifyEvent(&event2);
     }
 
-    else if (CheckCollision(ballPos->getX(), ballPos->getY(), ballCol->getWidth(), ballCol->getHeight(), cpuPos->getX(), cpuPos->getY(), cpuCol->getWidth(), cpuCol->getHeight())) {
+    else if (AEStaticRectToStaticCircle(&cpuPosition, (float)cpuCol->getWidth(), (float)cpuCol->getHeight(), &ballPosition, (float)ballCol->getWidth()/2.f)) {
         BallHitEvent event;
         notifyEvent(&event);
 
@@ -48,7 +39,17 @@ void CollisionManager::update() {
         notifyEvent(&event2);
     }
 
-    if (ballPos->getX() > 375 || ballPos->getX() < -375) {
+    PositionComponent* rightPos = static_cast<PositionComponent*>(mRight->getComponent("Position"));
+    CollisionComponent* rightCol = static_cast<CollisionComponent*>(mRight->getComponent("Collision"));
+
+    PositionComponent* leftPos = static_cast<PositionComponent*>(mLeft->getComponent("Position"));
+    CollisionComponent* leftCol = static_cast<CollisionComponent*>(mLeft->getComponent("Collision"));
+
+    AEVec2 rightPosition = AEVec2((float)rightPos->getX(), (float)rightPos->getY());
+    AEVec2 leftPosition = AEVec2((float)leftPos->getX(), (float)leftPos->getY());
+
+    if (AEStaticRectToStaticCircle(&rightPosition, (float)rightCol->getWidth(), (float)rightCol->getHeight(), &ballPosition, (float)ballCol->getWidth() / 2.f) ||
+        AEStaticRectToStaticCircle(&leftPosition, (float)leftCol->getWidth(), (float)leftCol->getHeight(), &ballPosition, (float)ballCol->getWidth() / 2.f)) {
         Reset event;
         notifyEvent(&event);
     }

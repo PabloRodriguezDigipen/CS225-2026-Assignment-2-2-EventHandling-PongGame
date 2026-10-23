@@ -9,7 +9,7 @@ public:
 
 class PlayerMoveEvent : public Event {
 public:
-    int mDistance;
+    int mDistance = 0;
 };
 
 class BallHitEvent : public Event {};

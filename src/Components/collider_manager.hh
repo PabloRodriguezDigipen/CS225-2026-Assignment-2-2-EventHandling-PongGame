@@ -10,8 +10,12 @@ class CollisionManager : public EventManager {
     Entity* mBall;
     Entity* mPlayer;
     Entity* mCPU;
+
+    Entity* mRight;
+    Entity* mLeft;
+
 public:
-    CollisionManager(Entity* player, Entity* ball, Entity* CPU);
+    CollisionManager(Entity* player, Entity* ball, Entity* CPU, Entity* right, Entity* left);
     void update() override;
 };
 

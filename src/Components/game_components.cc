@@ -77,8 +77,8 @@ CPUComponent::~CPUComponent() {}
 //-------------------------------------------------------------------------------------------------------------------
 
 BallComponent::BallComponent(int speedX, int speedY) : Component("Ball") {
-	mSpeedX = speedX;
-	mSpeedY = speedY;
+	mSpeedX = (float)speedX;
+	mSpeedY = (float)speedY;
 }
 
 void BallComponent::Update() {
@@ -86,7 +86,7 @@ void BallComponent::Update() {
 	if (position->getY() > 275 || position->getY() < -275)
 		mSpeedY = -mSpeedY;
 
-	position->setPosition(position->getX() + mSpeedX, position->getY() + mSpeedY);
+	position->setPosition((int)position->getX() + (int)mSpeedX, (int)position->getY() + (int)mSpeedY);
 }
 
 void BallComponent::OnRacket(BallHitEvent* event) {
