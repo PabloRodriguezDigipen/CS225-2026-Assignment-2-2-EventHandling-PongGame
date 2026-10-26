@@ -38,6 +38,12 @@ void Level_1_Load()
     //create limits
     right = new Entity;
     left = new Entity;
+
+    //create the collision manager
+    collisionManager = new CollisionManager(player, ball, CPU, right, left);
+
+    //create the input manager
+    inputManager = new InputEventManager;
 }
 
 void Level_1_Init()
@@ -83,7 +89,6 @@ void Level_1_Init()
     left->attach(leftColider);
 
     //subscribe the objects to the collision events
-    collisionManager = new CollisionManager(player, ball, CPU, right, left);
     //the ball collides with a racket
     collisionManager->registerEventHandler(new EventHandler<BallComponent, BallHitEvent>(BallComp, &BallComponent::OnRacket));
     //the cpu moves
@@ -94,7 +99,6 @@ void Level_1_Init()
     collisionManager->registerEventHandler(new EventHandler<CPUComponent, Reset>(CPUComp, &CPUComponent::OnReset));
 
     //subscribe the player and cpu to the input events
-    inputManager = new InputEventManager;
     inputManager->registerEventHandler(new EventHandler<PlayerComponent, PlayerMoveEvent>(PlayerComp, &PlayerComponent::OnMove));
     inputManager->registerEventHandler(new EventHandler<CPUComponent, CPUMoveEvent>(CPUComp, &CPUComponent::OnMove));
 }
@@ -135,11 +139,42 @@ void Level_1_Render()
 
 void Level_1_Free()
 {
+    //recreate the player
+    player = new Entity;
+    //recreate the ball
+    ball = new Entity;
+    //recreate the CPU
+    CPU = new Entity;
+    //recreate limits
+    right = new Entity;
+    left = new Entity;
 
+    //recreate the collision manager
+    collisionManager = new CollisionManager(player, ball, CPU, right, left);
+
+    //recreate the input manager
+    inputManager = new InputEventManager;
 }
 
 void Level_1_Unload()
 {
+    delete collisionManager;
+    delete inputManager;
+
+    delete player;
+    delete CPU;
+    delete ball;
+    delete right;
+    delete left;
+
+    collisionManager = nullptr;
+    inputManager = nullptr;
+
+    player = nullptr;
+    CPU = nullptr;
+    ball = nullptr;
+    right = nullptr;
+    left = nullptr;
 }
 
 void KeyboardInput()
