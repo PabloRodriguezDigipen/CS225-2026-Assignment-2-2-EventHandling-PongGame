@@ -158,15 +158,18 @@ void Level_1_Free()
 
 void Level_1_Unload()
 {
+    //deleted managers
     delete collisionManager;
     delete inputManager;
 
+    //deleted objects
     delete player;
     delete CPU;
     delete ball;
     delete right;
     delete left;
 
+    //set everything to null
     collisionManager = nullptr;
     inputManager = nullptr;
 
